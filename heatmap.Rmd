@@ -1,0 +1,54 @@
+---
+title: "heatmap"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+library(tidyverse)
+library(janitor)
+data <- read_csv("MIL_for_R.csv")
+  
+
+clean_data <- data %>% 
+  clean_names() %>% 
+  separate(date_time, into = c("y", "m", "d"), sep = "-") %>% 
+  mutate(inflow_af = inflow_cfs*1.9834591996927) %>% 
+  mutate(outflow_af = outflow_csf*1.9834591996927) %>% 
+  mutate(active_storage = storage_af-(520528-433800)) %>% 
+  mutate(scenario_cfs = ifelse(active_storage > (433800*.9) & inflow_cfs > outflow_csf, active_storage - (433800*.9), NA)) %>% 
+  mutate(scenario_af = scenario_cfs*1.9834591996927)
+
+
+
+```
+
+
+```{r}
+heatmap <- ggplot(data = clean_data, aes(x = y, y = m))+
+  geom_tile(aes(fill = scenario_af))
+
+heatmap
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
