@@ -58,6 +58,10 @@ heatmap <- ggplot(data = clean_data, aes(x = y, y = julian_date))+
 
 heatmap
 
+#should i add water year type to the x axis under year?
+#do we like blue or is there another color scheme that would be better?
+#anything else?
+
 
 ```
 
