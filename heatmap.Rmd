@@ -12,17 +12,28 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(janitor)
-data <- read_csv("MIL_for_R.csv")
-  
+library(stringr)
+library(lubridate)
+library(RColorBrewer)
+library(dendextend)
 
-clean_data <- data %>% 
+data <- read_csv("MIL_for_R.csv")
+
+clean_data <- data %>%
   clean_names() %>% 
+  mutate(month = month(ymd(date_time), label = TRUE, abbr = FALSE)) %>% 
+  mutate(date = date_time) %>% 
+  mutate(julian_date = yday(date)) %>% 
   separate(date_time, into = c("y", "m", "d"), sep = "-") %>% 
+  filter(y != 1994) %>% 
   mutate(inflow_af = inflow_cfs*1.9834591996927) %>% 
   mutate(outflow_af = outflow_csf*1.9834591996927) %>% 
   mutate(active_storage = storage_af-(520528-433800)) %>% 
   mutate(scenario_cfs = ifelse(active_storage > (433800*.9) & inflow_cfs > outflow_csf, active_storage - (433800*.9), NA)) %>% 
-  mutate(scenario_af = scenario_cfs*1.9834591996927)
+  mutate(scenario_af = scenario_cfs*1.9834591996927) %>% 
+  mutate(binary = ifelse(scenario_af>0, 1, 0))
+  
+
 
 
 
@@ -30,8 +41,20 @@ clean_data <- data %>%
 
 
 ```{r}
-heatmap <- ggplot(data = clean_data, aes(x = y, y = m))+
-  geom_tile(aes(fill = scenario_af))
+heatmap <- ggplot(data = clean_data, aes(x = y, y = julian_date))+
+  geom_tile(aes(fill = binary), show.legend = FALSE)+
+  scale_fill_continuous(na.value = "none")+
+  theme_bw()+
+  labs(x = "Year",
+       y = "Month")+
+  theme(axis.text.x = element_text(angle = 50, hjust = 1))+
+  scale_y_continuous(expand = c(0,0),
+                     labels = c("January", "February", "March",
+                                "April", "May", "June", 
+                                "July", "August", "September", 
+                                "October", "November", "December"), 
+                     breaks = c(15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349))
+
 
 heatmap
 
