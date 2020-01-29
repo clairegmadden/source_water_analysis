@@ -68,6 +68,22 @@ heatmap
 
 
 
+```{r}
+
+binary_subset <- clean_data %>% 
+  filter(binary == 1)
+
+
+summary_plot <- ggplot(binary_subset, aes(x = month, y = binary))+
+  geom_col()
+
+
+summary_plot
+
+
+
+
+```
 
 
 
