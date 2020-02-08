@@ -90,12 +90,12 @@ summary_plot <- ggplot(clean_data, aes(x = month, y = binary))+
   theme(axis.title.y = element_blank(),
         axis.text.y = element_blank(),
         axis.title.x = element_blank())+
-  scale_y_continuous(breaks = seq(0,150,50))
+  scale_y_continuous(breaks = seq(0,150,50)) 
 
 summary_plot
 
 
-
+# attempt to make frequency graph of "criteria met" 
 
 ```
 
