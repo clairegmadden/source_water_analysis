@@ -4,7 +4,9 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,
+                      fig.width = 22,
+                      fig.height = 14)
 ```
 
 
@@ -45,9 +47,16 @@ heatmap <- ggplot(data = clean_data, aes(x = y, y = julian_date))+
   geom_tile(aes(fill = binary), show.legend = FALSE)+
   scale_fill_continuous(na.value = "none")+
   theme_bw()+
-  labs(x = "Year",
-       y = "Month")+
-  theme(axis.text.x = element_text(angle = 50, hjust = 1))+
+  theme(axis.text.x = element_text(angle = 50, hjust = 1, size = 36),
+        axis.text.y = element_text(size = 36),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())+
+  scale_x_discrete(labels = c(1995, "","","","", 
+                              2000,"","","","", 
+                              2005,"","","","", 
+                              2010, "","","","", 
+                              2015, "", "","","",
+                              2020))+
   scale_y_continuous(expand = c(0,0),
                      labels = c("January", "February", "March",
                                 "April", "May", "June", 
@@ -68,15 +77,20 @@ heatmap
 
 
 
-```{r}
+```{r, fig.width = 2, fig.height = 14}
 
 binary_subset <- clean_data %>% 
   filter(binary == 1)
 
 
-summary_plot <- ggplot(binary_subset, aes(x = month, y = binary))+
-  geom_col()
-
+summary_plot <- ggplot(clean_data, aes(x = month, y = binary))+
+  geom_col()+
+  coord_flip()+
+  theme_minimal()+
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.x = element_blank())+
+  scale_y_continuous(breaks = seq(0,150,50))
 
 summary_plot
 
