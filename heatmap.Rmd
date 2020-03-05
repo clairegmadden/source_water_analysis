@@ -4,9 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
-                      fig.width = 22,
-                      fig.height = 14)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
@@ -47,10 +45,6 @@ heatmap <- ggplot(data = clean_data, aes(x = y, y = julian_date))+
   geom_tile(aes(fill = binary), show.legend = FALSE)+
   scale_fill_continuous(na.value = "none")+
   theme_bw()+
-  theme(axis.text.x = element_text(angle = 50, hjust = 1, size = 36),
-        axis.text.y = element_text(size = 36),
-        axis.title.x = element_blank(),
-        axis.title.y = element_blank())+
   scale_x_discrete(labels = c(1995, "","","","", 
                               2000,"","","","", 
                               2005,"","","","", 
@@ -62,7 +56,9 @@ heatmap <- ggplot(data = clean_data, aes(x = y, y = julian_date))+
                                 "April", "May", "June", 
                                 "July", "August", "September", 
                                 "October", "November", "December"), 
-                     breaks = c(15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349))
+                     breaks = c(15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349))+
+  labs(x = "Year",
+       y = "Day of the Year")
 
 
 heatmap
